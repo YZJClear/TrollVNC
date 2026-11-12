@@ -67,6 +67,21 @@ add_bool ServerCursor          "${TVNC_SERVER_CURSOR:-}"
 add_bool BonjourEnabled        "${TVNC_BONJOUR_ENABLED:-}"
 add_bool KeyLogging            "${TVNC_KEY_LOGGING:-}"
 
+# LaunchAtLogin accepts a boolean or a custom app bundle identifier.
+add_launch_at_login() {
+  local v="${TVNC_LAUNCH_AT_LOGIN:-}"
+  if [[ "$v" == "true" || "$v" == "True" || "$v" == "TRUE" ]]; then
+    echo "  <key>LaunchAtLogin</key>" >> "$PLIST"
+    echo "  <true/>" >> "$PLIST"
+  elif [[ "$v" == "false" || "$v" == "False" || "$v" == "FALSE" ]]; then
+    echo "  <key>LaunchAtLogin</key>" >> "$PLIST"
+    echo "  <false/>" >> "$PLIST"
+  elif [[ -n "$v" ]]; then
+    add_str LaunchAtLogin "$v"
+  fi
+}
+add_launch_at_login
+
 # Strings (optional)
 add_str DesktopName            "${TVNC_DESKTOP_NAME:-}"
 add_str FrameRateSpec          "${TVNC_FRAME_RATE_SPEC:-}"
