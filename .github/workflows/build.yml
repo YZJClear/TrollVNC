@@ -134,6 +134,10 @@ jobs:
           TVNC_FULL_PASSWORD: ${{ secrets.TVNC_FULL_PASSWORD }}
           TVNC_VIEWONLY_PASSWORD: ${{ secrets.TVNC_VIEWONLY_PASSWORD }}
         run: |
+          if [[ -z "${TVNC_FULL_PASSWORD:-}" ]]; then
+            echo "::error::Set the TVNC_FULL_PASSWORD repository secret before building a public Repeater deployment."
+            exit 1
+          fi
           bash devkit/gen-managed-plist.sh
 
       - name: Build package (RootHide)
